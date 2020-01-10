@@ -12,7 +12,23 @@ body{
     width: 38px;
 }
 
+.text-desc {
+    font-size: 12px;
+    font-weight: normal;
+    color: #999;
+}
+
 .btn-publish{
     float: right;
     margin-bottom: 15px;
 }
+
+.profile .groupRight {
+    margin-top: 15px;
+}
+
+.community-menu {
+    color: #999;
+    font-size: 13px;
+}
+
