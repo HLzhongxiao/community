@@ -2,6 +2,9 @@ package com.hl.community.service;
 
 import com.hl.community.dto.PaginationDTO;
 import com.hl.community.dto.QuestionDTO;
+import com.hl.community.exception.CustomErrorCode;
+import com.hl.community.exception.CustomizeException;
+import com.hl.community.exception.ICustomizeErrorCode;
 import com.hl.community.mapper.QuestionMapper;
 import com.hl.community.mapper.UserMapper;
 import com.hl.community.model.Question;
@@ -89,6 +92,9 @@ public class QuestionService {
 
     public QuestionDTO getById(Integer id) {
         Question question = questionMapper.getById(id);
+        if (question == null) {
+            throw new CustomizeException(CustomErrorCode.QUESTION_NOT_FOUND);
+        }
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question, questionDTO);
         User user = userMapper.findById(question.getCreator());
@@ -98,9 +104,16 @@ public class QuestionService {
 
     public void createOrUpdate(Question question) {
         if (question.getId() == null) {
+            question.setViewCount(0);
+            question.setCommentCount(0);
+            question.setLikeCount(0);
             questionMapper.create(question);
         }else{
             questionMapper.update(question);
         }
+    }
+
+    public void incView(Integer id) {
+        questionMapper.updateViewCount(id, 1);
     }
 }
