@@ -1,11 +1,6 @@
 package com.hl.community.controller;
 
 import com.hl.community.dto.PaginationDTO;
-import com.hl.community.dto.QuestionDTO;
-import com.hl.community.mapper.QuestionMapper;
-import com.hl.community.mapper.UserMapper;
-import com.hl.community.model.Question;
-import com.hl.community.model.User;
 import com.hl.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

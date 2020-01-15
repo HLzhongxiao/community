@@ -4,7 +4,6 @@ import com.hl.community.dto.PaginationDTO;
 import com.hl.community.dto.QuestionDTO;
 import com.hl.community.exception.CustomErrorCode;
 import com.hl.community.exception.CustomizeException;
-import com.hl.community.exception.ICustomizeErrorCode;
 import com.hl.community.mapper.QuestionMapper;
 import com.hl.community.mapper.UserMapper;
 import com.hl.community.model.Question;
@@ -58,7 +57,7 @@ public class QuestionService {
         return paginationDTO;
     }
 
-    public PaginationDTO list(Integer userId, Integer page, Integer size) {
+    public PaginationDTO list(Long userId, Integer page, Integer size) {
         Integer totalCount = questionMapper.countByUserId(userId);
         Integer totalPage = 0;
         if (totalCount % size == 0){
@@ -90,7 +89,7 @@ public class QuestionService {
         return paginationDTO;
     }
 
-    public QuestionDTO getById(Integer id) {
+    public QuestionDTO getById(Long id) {
         Question question = questionMapper.getById(id);
         if (question == null) {
             throw new CustomizeException(CustomErrorCode.QUESTION_NOT_FOUND);
@@ -113,7 +112,7 @@ public class QuestionService {
         }
     }
 
-    public void incView(Integer id) {
+    public void incView(Long id) {
         questionMapper.updateViewCount(id, 1);
     }
 }

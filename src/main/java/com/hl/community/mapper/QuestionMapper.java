@@ -15,23 +15,26 @@ public interface QuestionMapper {
     List<Question> list(@Param("offset") Integer offset, @Param("size") Integer size);
 
     @Select("select * from question where creator=#{userId} limit #{offset},#{size}")
-    List<Question> listByUserId(@Param("userId")Integer userId, @Param("offset") Integer offset, @Param("size") Integer size);
+    List<Question> listByUserId(@Param("userId")Long userId, @Param("offset") Integer offset, @Param("size") Integer size);
 
     @Select("select count(1) from question")
     Integer count();
 
     @Select("select count(1) from question where creator=#{userId}")
-    Integer countByUserId(@Param("userId") Integer userId);
+    Integer countByUserId(@Param("userId") Long userId);
 
     @Select("select * from question where id=#{id}")
-    Question getById(@Param("id") Integer id);
+    Question getById(@Param("id") Long id);
 
     @Update("update question set title=#{title},description=#{description},gmt_modified=#{gmtModified},tag=#{tag},view_count=#{viewCount},like_count=#{likeCount},comment_count=#{commentCount} where id=#{id}")
     void update(Question question);
 
     @Select("select view_count from question where id = #{id}")
-    Integer getViewCount(@Param("id") Integer id);
+    Integer getViewCount(@Param("id") Long id);
 
     @Update("update question set view_count=view_count+#{viewCount} where id=#{id}")
-    void updateViewCount(@Param("id") Integer id, @Param("viewCount")Integer viewCount);
+    void updateViewCount(@Param("id") Long id, @Param("viewCount")Integer viewCount);
+
+    @Select("select * from question where id=#{id}")
+    Question selectById(@Param("id") Long id);
 }
