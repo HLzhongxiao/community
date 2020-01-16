@@ -40,6 +40,17 @@ body{
     margin: 50px;
 }
 
+.sub-comments{
+    border-radius: 5px;
+    margin-top: 10px;
+    border: 1px solid #eee;
+    padding-top: 15px;
+}
+
+.sub-comments .btn{
+    margin: 10px 0;
+}
+
 .comment{
     margin: 15px 0px;
 }
@@ -47,6 +58,22 @@ body{
 .btn-comment{
     float: right;
     margin-bottom: 10px;
+}
+
+.question-tag{
+    margin-right: 5px;
+}
+
+.question-related{
+    line-height: 20px;
+    font-size: 12px;
+    margin-left: 0;
+    list-style: none;
+    padding-left: 0;
+}
+
+.question-img {
+    width: 100%;
 }
 
 .menu{
@@ -57,6 +84,10 @@ body{
     margin-right: 6px;
     font-size: 15px;
     cursor: pointer;
+}
+
+.menu .active {
+    color: #499ef3;
 }
 
 .menu .icon:hover {

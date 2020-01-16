@@ -11,7 +11,7 @@ import java.util.List;
 @Mapper
 public interface CommentMapper {
 
-    @Insert("insert into comment(parent_id,type,commentator,gmt_create,gmt_modified,like_count,content) values(#{parentId},#{type},#{commentator},#{gmtCreate},#{gmtModified},#{likeCount},#{content})")
+    @Insert("insert into comment(parent_id,type,commentator,gmt_create,gmt_modified,like_count,content,comment_count) values(#{parentId},#{type},#{commentator},#{gmtCreate},#{gmtModified},#{likeCount},#{content},#{commentCount})")
     public void insert(Comment comment);
 
     @Select("select * from comment where id=#{id}")

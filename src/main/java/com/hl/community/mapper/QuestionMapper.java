@@ -11,10 +11,10 @@ public interface QuestionMapper {
     @Insert("insert into question(title,description,gmt_create,gmt_modified,creator,comment_count,view_count,like_count,tag) values(#{title},#{description},#{gmtCreate},#{gmtModified},#{creator},#{commentCount},#{viewCount},#{likeCount},#{tag})")
     public void create(Question question);
 
-    @Select("select * from question limit #{offset},#{size}")
+    @Select("select * from question order by gmt_create desc limit #{offset},#{size}")
     List<Question> list(@Param("offset") Integer offset, @Param("size") Integer size);
 
-    @Select("select * from question where creator=#{userId} limit #{offset},#{size}")
+    @Select("select * from question where creator=#{userId} order by gmt_create desc limit #{offset},#{size}")
     List<Question> listByUserId(@Param("userId")Long userId, @Param("offset") Integer offset, @Param("size") Integer size);
 
     @Select("select count(1) from question")

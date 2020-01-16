@@ -4,22 +4,29 @@ import com.hl.community.dto.PaginationDTO;
 import com.hl.community.dto.QuestionDTO;
 import com.hl.community.exception.CustomErrorCode;
 import com.hl.community.exception.CustomizeException;
+import com.hl.community.mapper.QuestionExtMapper;
 import com.hl.community.mapper.QuestionMapper;
 import com.hl.community.mapper.UserMapper;
 import com.hl.community.model.Question;
 import com.hl.community.model.User;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class QuestionService {
 
     @Autowired
     private QuestionMapper questionMapper;
+
+    @Autowired
+    private QuestionExtMapper questionExtMapper;
 
     @Autowired
     private UserMapper userMapper;
@@ -114,5 +121,20 @@ public class QuestionService {
 
     public void incView(Long id) {
         questionMapper.updateViewCount(id, 1);
+    }
+
+    public List<QuestionDTO> selecRelated(QuestionDTO queryDTO) {
+        if (StringUtils.isBlank(queryDTO.getTag())) {
+            return new ArrayList<>();
+        }
+        String[] tags = StringUtils.split(queryDTO.getTag(), ",");
+        String regexpTag = Arrays.stream(tags).collect(Collectors.joining("|"));
+        List<Question> questions = questionExtMapper.selectRelated(regexpTag, queryDTO.getId());
+        List<QuestionDTO> questionDTOS = questions.stream().map(q -> {
+            QuestionDTO questionDTO = new QuestionDTO();
+            BeanUtils.copyProperties(q, questionDTO);
+            return questionDTO;
+        }).collect(Collectors.toList());
+        return questionDTOS;
     }
 }

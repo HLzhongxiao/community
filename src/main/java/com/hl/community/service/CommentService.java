@@ -4,10 +4,7 @@ import com.hl.community.dto.CommentDTO;
 import com.hl.community.enums.CommentTypeEnum;
 import com.hl.community.exception.CustomErrorCode;
 import com.hl.community.exception.CustomizeException;
-import com.hl.community.mapper.CommentMapper;
-import com.hl.community.mapper.QuestionExtMapper;
-import com.hl.community.mapper.QuestionMapper;
-import com.hl.community.mapper.UserMapper;
+import com.hl.community.mapper.*;
 import com.hl.community.model.Comment;
 import com.hl.community.model.Question;
 import com.hl.community.model.User;
@@ -37,6 +34,9 @@ public class CommentService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private CommentExtMapper commentExtMapper;
+
     @Transactional
     public void insert(Comment comment) {
         if (comment.getParentId() == null || comment.getParentId() == 0) {
@@ -52,6 +52,8 @@ public class CommentService {
                 throw new CustomizeException(CustomErrorCode.COMMENT_NOT_FOUND);
             }
             commentMapper.insert(comment);
+            // 增加评论数
+            commentExtMapper.incCommentCount(comment.getParentId(),1);
         }else{
             // 回复问题
             Question question = questionMapper.selectById(comment.getParentId());
@@ -63,8 +65,8 @@ public class CommentService {
         }
     }
 
-    public List<CommentDTO> listByQuestionId(Long id) {
-        List<Comment> comments = commentMapper.selectByIdAndType(id, CommentTypeEnum.QUESTION.getType());
+    public List<CommentDTO> listByTargetId(Long id, CommentTypeEnum type) {
+        List<Comment> comments = commentMapper.selectByIdAndType(id, type.getType());
         if (comments.size() == 0) {
             return new ArrayList<>();
         }
