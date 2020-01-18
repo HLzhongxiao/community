@@ -111,7 +111,12 @@ function collapseComments(e) {
     }
 }
 
+function showSelectTag() {
+    $("#select-tag").show();
+}
+
 function selectTag(value) {
+    console.log(value);
     var previous = $("#tag").val();
     if (previous.indexOf(value) == -1) {
         if (previous) {
