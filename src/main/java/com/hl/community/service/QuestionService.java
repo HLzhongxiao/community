@@ -2,6 +2,7 @@ package com.hl.community.service;
 
 import com.hl.community.dto.PaginationDTO;
 import com.hl.community.dto.QuestionDTO;
+import com.hl.community.dto.QuestionQueryDTO;
 import com.hl.community.exception.CustomErrorCode;
 import com.hl.community.exception.CustomizeException;
 import com.hl.community.mapper.QuestionExtMapper;
@@ -31,9 +32,21 @@ public class QuestionService {
     @Autowired
     private UserMapper userMapper;
 
-    public PaginationDTO list(Integer page, Integer size) {
+    public PaginationDTO list(String search, Integer page, Integer size) {
 
-        Integer totalCount = questionMapper.count();
+        if (StringUtils.isEmpty(search)){
+            search = null;
+        }
+
+        if (StringUtils.isNotBlank(search)) {
+            String[] tags = StringUtils.split(search," ");
+            search = Arrays.stream(tags).collect(Collectors.joining("|"));
+        }
+
+        QuestionQueryDTO questionQueryDTO = new QuestionQueryDTO();
+        questionQueryDTO.setSearch(search);
+
+        Integer totalCount = questionExtMapper.countBySearch(questionQueryDTO.getSearch());
         Integer totalPage = 0;
         if (totalCount % size == 0){
             totalPage = totalCount / size;
@@ -46,7 +59,10 @@ public class QuestionService {
 
         Integer offset = size * (page - 1);
 
-        List<Question> questions = questionMapper.list(offset, size);
+        questionQueryDTO.setPage(offset);
+        questionQueryDTO.setSize(size);
+
+        List<Question> questions = questionExtMapper.selectBySearch(questionQueryDTO);
         List<QuestionDTO> questionDTOS = new ArrayList<>();
         PaginationDTO<QuestionDTO> paginationDTO = new PaginationDTO<>();
         paginationDTO.setTotalPage(totalPage);
